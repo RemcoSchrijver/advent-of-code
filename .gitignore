@@ -1,3 +1,11 @@
+# nix-direnv 
+**/.direnv
+
+# scala-cli
+**/.bsp
+**/.metals
+**/.scala-build
+
 *.class
 *.log
 
