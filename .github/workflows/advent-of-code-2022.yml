@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '2022/src/**' # Triggers when changing solutions
+  workflow_dispatch:
 
 jobs:
   test:
