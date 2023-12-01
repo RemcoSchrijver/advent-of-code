@@ -1,0 +1,22 @@
+name: Create Advent of Code 2022 badges 
+
+on: 
+  push:
+    paths:
+      - '2022/src/**' # Triggers when changing solutions
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: joblo2213/aoc-badges-action@master
+        with:
+          userid: ${{ secrets.AOC_USER_ID }}
+          session: ${{ secrets.AOC_SESSION_SECRET }}
+          year: 2022
+          file: '2022/README.md'
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update badges
+          file_pattern: '**/README.md'
