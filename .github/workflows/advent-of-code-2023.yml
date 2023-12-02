@@ -1,13 +1,13 @@
-name: Create Advent of Code 2022 badges 
+name: Create Advent of Code 2023 badges 
 
 on: 
   push:
     paths:
-      - '2022/src/**' # Triggers when changing solutions
+      - '2023/src/**' # Triggers when changing solutions
   workflow_dispatch:
 
 jobs:
-  add_stars_to_2022_dir:
+  add_stars_to_2023_dir:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,8 +15,8 @@ jobs:
         with:
           userid: ${{ secrets.AOC_USER_ID }}
           session: ${{ secrets.AOC_SESSION_SECRET }}
-          year: 2022
-          file: '2022/README.md'
+          year: 2023
+          file: '2023/README.md'
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update badges
@@ -30,9 +30,9 @@ jobs:
         with:
           userid: ${{ secrets.AOC_USER_ID }}
           session: ${{ secrets.AOC_SESSION_SECRET }}
-          year: 2022
+          year: 2023
           file: 'README.md'
-          starsRegex: '![2022](?<=https:\/\/img\.shields\.io\/badge\/stars%20⭐-)[0-9]+(?=-yellow)' 
+          starsRegex: '![2023](?<=https:\/\/img\.shields\.io\/badge\/stars%20⭐-)[0-9]+(?=-yellow)' 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update badges
