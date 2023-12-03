@@ -14,7 +14,7 @@ I chose scala for 2023 because I wanted to brush up on my functional
 programming skills.
 
 ## 2022
-![2022](https://img.shields.io/badge/stars%20⭐-34-yellow)
+![2022](https://img.shields.io/badge/stars%20⭐-4-yellow)
 
 This one is done retroactively whenever I feel like it, because this was 
 around 2023 this one is also in scala.
