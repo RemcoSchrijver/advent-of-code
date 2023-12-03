@@ -32,7 +32,7 @@ jobs:
           session: ${{ secrets.AOC_SESSION_SECRET }}
           year: 2023
           file: 'README.md'
-          starsRegex: '\[2023\](?<=https:\/\/img\.shields\.io\/badge\/stars%20⭐-)[0-9]+(?=-yellow)' 
+          starsRegex: '(?<=2023\]\(https:\/\/img\.shields\.io\/badge\/stars%20⭐-)[0-9]+(?=-yellow)' 
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: Update badges
