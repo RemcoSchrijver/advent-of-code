@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  add_stars_to_2022_dir:
+  add_stars_for_2022:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
