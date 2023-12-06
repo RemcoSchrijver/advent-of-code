@@ -10,8 +10,6 @@ import java.nio.charset.MalformedInputException
 @main def part1: Unit =
     println(s"The solution is ${part1(loadInput())}")
 
-// Part two is overoptimized because I read the problem wrong, increasing my problem space enormously.
-// So now with hashmaps it's really fast now though.
 @main def part2: Unit =
     println(s"The solution is ${part2(loadInput())}")
 
