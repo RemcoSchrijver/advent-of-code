@@ -8,7 +8,7 @@ The dependencies can be loaded using
 
 
 ## 2023
-![2023](https://img.shields.io/badge/stars%20⭐-12-yellow)
+![2023](https://img.shields.io/badge/stars%20⭐-14-yellow)
 
 I chose scala for 2023 because I wanted to brush up on my functional 
 programming skills.
