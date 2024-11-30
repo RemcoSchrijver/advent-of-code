@@ -6,15 +6,17 @@ The dependencies can be loaded using
 [nix-direnv](https://github.com/nix-community/nix-direnv) automatically 
 (flake support is required).
 
+## 2024
+![2024](https://img.shields.io/badge/stars%20⭐-0-yellow)
+
+For this one I chose Python
 
 ## 2023
 ![2023](https://img.shields.io/badge/stars%20⭐-14-yellow)
 
-I chose scala for 2023 because I wanted to brush up on my functional 
-programming skills.
+I chose Scala for 2023 because I wanted to brush up on my functional programming skills.
 
 ## 2022
 ![2022](https://img.shields.io/badge/stars%20⭐-4-yellow)
 
-This one is done retroactively whenever I feel like it, because this was 
-around 2023 this one is also in scala.
+This one is done retroactively whenever I feel like it, because this was around 2023 this one is also in Scala.

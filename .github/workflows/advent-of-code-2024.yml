@@ -1,0 +1,31 @@
+name: Create Advent of Code 2024 badges 
+
+on: 
+  push:
+    paths:
+      - '2024/src/**' # Triggers when changing solutions
+  workflow_dispatch:
+
+jobs:
+  add_stars_2024:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: joblo2213/aoc-badges-action@master
+        with:
+          userid: ${{ secrets.AOC_USER_ID }}
+          session: ${{ secrets.AOC_SESSION_SECRET }}
+          year: 2024
+          file: '2024/README.md'
+      - uses: joblo2213/aoc-badges-action@master
+        with:
+          userid: ${{ secrets.AOC_USER_ID }}
+          session: ${{ secrets.AOC_SESSION_SECRET }}
+          year: 2024
+          file: 'README.md'
+          starsRegex: '(?<=2024\]\(https:\/\/img\.shields\.io\/badge\/stars%20⭐-)[0-9]+(?=-yellow)' 
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update badges
+          file_pattern: '**/README.md README.md'
+
