@@ -9,7 +9,7 @@ The dependencies can be loaded using
 ## 2024
 ![2024](https://img.shields.io/badge/stars%20⭐-0-yellow)
 
-For this one I chose Python
+For this one I chose Python.
 
 ## 2023
 ![2023](https://img.shields.io/badge/stars%20⭐-14-yellow)
