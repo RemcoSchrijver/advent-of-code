@@ -1,5 +1,4 @@
 import sys
-from typing import Optional
 from inputs import load_input
 
 
