@@ -1,4 +1,3 @@
-import re
 import sys
 from inputs import load_input
 
