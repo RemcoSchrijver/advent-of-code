@@ -7,7 +7,7 @@ The dependencies can be loaded using
 (flake support is required).
 
 ## 2024
-![2024](https://img.shields.io/badge/stars%20⭐-24-yellow)
+![2024](https://img.shields.io/badge/stars%20⭐-26-yellow)
 
 For this one I chose Python.
 
