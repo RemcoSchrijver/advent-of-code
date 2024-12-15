@@ -11,7 +11,9 @@ def part1() -> int:
 
 def part2() -> int:
     input_strings = load_input("./input/day15")
-    pass
+    grid, start_pos, movements = load_problem_2(input_strings)
+    grid = simulate_movements_larger(start_pos, grid, movements)
+    return calculate_score_larger(grid)
 
 
 def create_grid(input_strings: list[str]) -> tuple[list[list[str]], tuple[int, int]]:
@@ -108,7 +110,7 @@ def create_larger_grid(
         for x, char in enumerate(input_string.strip()):
             match char:
                 case "@":
-                    start_pos = (y, x)
+                    start_pos = (y, x * 2)
                     row.append(char)
                     row.append(".")
                 case "O":
@@ -120,7 +122,6 @@ def create_larger_grid(
 
         grid.append(row)
     return grid, start_pos
-
 
 
 def load_problem_2(
@@ -155,27 +156,78 @@ def move_robot_larger(
         case "#":
             return start_pos
         case _:
-            counter = 1
-            while grid[y + dy * counter][x + dx * counter] == "O":
-                counter += 1
-            if grid[y + dy * (counter)][x + dx * (counter)] == "#":
-                return start_pos
+            if dy == 0:
+                counter = 1
+                while grid[y + dy * counter][x + dx * counter] in "[]":
+                    counter += 2
+                if grid[y + dy * (counter)][x + dx * (counter)] == "#":
+                    return start_pos
 
-            i = 1
-            while i < counter:
-                grid[y + dy * (i + 1)][x + dx * (i + 1)] = "O"
-                i += 1
+                i = 1
+                if dx > 0:
+                    while i < counter:
+                        grid[y + dy * (i + 1)][x + dx * (i + 1)] = "["
+                        i += 1
+                        grid[y + dy * (i + 1)][x + dx * (i + 1)] = "]"
+                        i += 1
+                else:
+                    while i < counter:
+                        grid[y + dy * (i + 1)][x + dx * (i + 1)] = "]"
+                        i += 1
+                        grid[y + dy * (i + 1)][x + dx * (i + 1)] = "["
+                        i += 1
+
+                grid[y][x] = "."
+                grid[y + dy][x + dx] = "@"
+                return (y + dy, x + dx)
+
+            if grid_value == "[":
+                start_box = (y + dy, x, y + dy, x + 1)
+            else:
+                start_box = (y + dy, x - 1, y + dy, x)
+            connected_boxes = get_connected_boxes_y([start_box], grid, dy)
+            for y1, x1, y2, x2 in connected_boxes:
+                if grid[y1 + dy][x1] == "#" or grid[y2 + dy][x2] == "#":
+                    return start_pos
+            marked = set()
+            for y1, x1, y2, x2 in connected_boxes:
+                if (y1, x1) not in marked:
+                    grid[y1][x1] = "."
+                if (y2, x2) not in marked:
+                    grid[y2][x2] = "."
+                grid[y1 + dy][x1] = "["
+                marked.add((y1 + dy, x1))
+                grid[y2 + dy][x2] = "]"
+                marked.add((y2 + dy, x2))
+
             grid[y][x] = "."
             grid[y + dy][x + dx] = "@"
             return (y + dy, x + dx)
-    return start_pos
 
 
-def calculate_score(grid: list[list[str]]) -> int:
+def get_connected_boxes_y(
+    connected_boxes: list[tuple[int, int, int, int]], grid: list[list[str]], dy: int
+) -> list[tuple[int, int, int, int]]:
+    if len(connected_boxes) < 1:
+        return []
+    new_connected_boxes = []
+    for y1, x1, y2, x2 in connected_boxes:
+        next_tiles = grid[y1 + dy][x1] + grid[y2 + dy][x2]
+        if next_tiles == "[]":
+            new_connected_boxes.append((y1 + dy, x1, y2 + dy, x2))
+            continue
+        if "]" in next_tiles:
+            new_connected_boxes.append((y1 + dy, x1 - 1, y2 + dy, x1))
+        if "[" in next_tiles:
+            new_connected_boxes.append((y1 + dy, x2, y2 + dy, x2 + 1))
+    return connected_boxes + get_connected_boxes_y(new_connected_boxes, grid, dy)
+
+
+def calculate_score_larger(grid: list[list[str]]) -> int:
     result = 0
     for y, row in enumerate(grid):
         for x, char in enumerate(row):
-            if char == "O":
+            if char == "[":
                 result += 100 * y + x
     return result
 
