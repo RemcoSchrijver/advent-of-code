@@ -14,7 +14,8 @@ def part1() -> int:
 def part2() -> int:
     input_strings = load_input("./input/day16")
     grid, start, end = load_map(input_strings)
-    paths = dfs_recursive(grid, start, end, set(), 0, (0, 1))
+    max_score = depth_first_search(grid, start, end)[end]
+    paths = dfs_recursive(grid, start, end, set(), 0, (0, 1), max_score)
     optimal_tiles = set()
     smallest_score = paths[0][1]
     for path, score in paths:
@@ -86,10 +87,14 @@ def dfs_recursive(
     visited: set[tuple[int, int]],
     score: int,
     direction: tuple[int, int],
+    max_score: int,
 ) -> list[tuple[list[tuple[int, int]], int]]:
     if position == end:
         return [([position], score)]
+    if score > max_score:
+        return [([], score)]
     visited.add(position)
+    visited = copy.deepcopy(visited)
     potential_positions = [
         (direction, score + 1),
         (rotate(direction), score + 1001),
@@ -108,6 +113,7 @@ def dfs_recursive(
                 visited,
                 new_score,
                 new_direction,
+                max_score,
             )
             for path, score in found_paths:
                 paths.append(([position] + path, score))
