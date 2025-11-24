@@ -6,6 +6,11 @@ The dependencies can be loaded using
 [nix-direnv](https://github.com/nix-community/nix-direnv) automatically 
 (flake support is required).
 
+## 2025
+![2025](https://img.shields.io/badge/stars%20⭐-0-yellow)
+
+Decided to give ruby a try this time around.
+
 ## 2024
 ![2024](https://img.shields.io/badge/stars%20⭐-33-yellow)
 
