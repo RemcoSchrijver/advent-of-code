@@ -11,7 +11,7 @@
             {
                 devShells.default = pkgs.mkShell {
                     packages = with pkgs; [
-                        ruby
+                        zulu25
                     ];
                 };
             }
