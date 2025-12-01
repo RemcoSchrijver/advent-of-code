@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 public class Utils {
     public static List<String> readInput(String input) throws IOException {
-        try (FileReader fileReader = new FileReader(new File("../input/" + input))) {
+        try (FileReader fileReader = new FileReader(new File("./input/" + input))) {
             return fileReader.readAllLines();
 		} catch (IOException e) {
             System.err.println("Problem with reading file: " + input);
