@@ -7,7 +7,7 @@ The dependencies can be loaded using
 (flake support is required).
 
 ## 2025
-![2025](https://img.shields.io/badge/stars%20⭐-0-yellow)
+![2025](https://img.shields.io/badge/stars%20⭐-2-yellow)
 
 Decided to give Java a try this time around.
 
