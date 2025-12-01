@@ -41,17 +41,14 @@ public class Day01 {
         List<Integer> codeSequence = new ArrayList<Integer>(List.of(50));
         int zeroPasses = 0;
         for (String line : input) {
-            System.out.println("Line: " + line);
             int previous = codeSequence.getLast();
             Direction direction = line.substring(0, 1).equals("L") ? Direction.LEFT : Direction.RIGHT;
             int movement = Integer.parseInt(line.substring(1));
             zeroPasses += Math.floorDiv(movement, 100);
-            System.out.println("Zero Passes " + Math.floorDiv(movement, 100));
 
             if (direction == Direction.LEFT) {
                 int newNum = previous - (movement % 100);
                 if (newNum < 0) {
-                    System.out.println("Passed zero left");
                     if (previous != 0) {
                         zeroPasses += 1;
                     }
@@ -62,15 +59,12 @@ public class Day01 {
             } else {
                 int newNum = previous + (movement % 100);
                 if (newNum > 100) {
-                    System.out.println("Passed zero right");
                     zeroPasses += 1;
                 }
                 codeSequence.addLast((previous + movement) % 100);
             }
-            System.out.println("Current num: " + codeSequence.getLast());
         }
         List<Integer> zeroes = codeSequence.stream().filter(number -> number == 0).toList();
-        System.out.println(zeroes.size());
         zeroPasses += zeroes.size();
 
         return zeroPasses;
