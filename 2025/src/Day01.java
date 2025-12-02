@@ -5,7 +5,7 @@ import java.util.List;
 public class Day01 {
     public static void main(String[] args) throws IOException {
         String partArg = args[0];
-        List<String> input = Utils.readInput("day01.txt");
+        List<String> input = Utils.readInput("day01.txt", args);
         System.out.println(Utils.executeParts(partArg, input, Day01::part1, Day01::part2));
     }
 

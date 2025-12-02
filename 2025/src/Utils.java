@@ -5,29 +5,24 @@ import java.util.List;
 import java.util.function.Function;
 
 public class Utils {
-    public static List<String> readInput(String input) throws IOException {
-        try (FileReader fileReader = new FileReader(new File("./input/" + input))) {
+    public static List<String> readInput(String input, String[] args) throws IOException {
+        boolean test = false;
+        if (args.length == 2) {
+            if (args[1].toLowerCase().equals("--test")) {
+                test = true;
+            }
+        }
+        String directory = test ? "./tests/" : "./input/";
+        try (FileReader fileReader = new FileReader(new File(directory + input))) {
             return fileReader.readAllLines();
-		} catch (IOException e) {
+        } catch (IOException e) {
             System.err.println("Problem with reading file: " + input);
-			e.printStackTrace();
+            e.printStackTrace();
             throw e;
-		}
-    }
-
-    public static int executeParts(String partArg, List<String> input, Function<List<String>, Integer> part1, Function<List<String>, Integer> part2) {
-        switch (partArg.toLowerCase().replaceAll(" ", "")) {
-            case "part1":
-                return part1.apply(input);
-            case "part2":
-                return part2.apply(input);
-            default:
-                System.err.println("Something is wrong with your arguments: " + partArg);
-                return -1;
         }
     }
 
-    public static long executePartsLong(String partArg, List<String> input, Function<List<String>, Long> part1, Function<List<String>, Long> part2) {
+    public static <T, S> S executeParts(String partArg, T input, Function<T, S> part1, Function<T, S> part2) {
         switch (partArg.toLowerCase().replaceAll(" ", "")) {
             case "part1":
                 return part1.apply(input);
@@ -35,7 +30,7 @@ public class Utils {
                 return part2.apply(input);
             default:
                 System.err.println("Something is wrong with your arguments: " + partArg);
-                return -1;
+                return null;
         }
     }
 }

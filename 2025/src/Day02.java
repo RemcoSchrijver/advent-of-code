@@ -9,8 +9,8 @@ public class Day02 {
 
     public static void main(String[] args) throws IOException {
         String partArg = args[0];
-        List<String> input = Utils.readInput("day02.txt");
-        System.out.println(Utils.executePartsLong(partArg, input, Day02::part1, Day02::part2));
+        List<String> input = Utils.readInput("day02.txt", args);
+        System.out.println(Utils.executeParts(partArg, input, Day02::part1, Day02::part2));
     }
 
     public static long part1(List<String> input) {
