@@ -26,4 +26,16 @@ public class Utils {
                 return -1;
         }
     }
+
+    public static long executePartsLong(String partArg, List<String> input, Function<List<String>, Long> part1, Function<List<String>, Long> part2) {
+        switch (partArg.toLowerCase().replaceAll(" ", "")) {
+            case "part1":
+                return part1.apply(input);
+            case "part2":
+                return part2.apply(input);
+            default:
+                System.err.println("Something is wrong with your arguments: " + partArg);
+                return -1;
+        }
+    }
 }
