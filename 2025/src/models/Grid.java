@@ -13,7 +13,7 @@ public class Grid<T> implements Iterable<T> {
     public Grid(int length, int width) {
         this.grid = new ArrayList<>();
         for (int i = 0; i < length; i++) {
-            new ArrayList<>().add(new ArrayList<>(width));
+            grid.add(new ArrayList<>());
         }
     }
 
@@ -45,9 +45,21 @@ public class Grid<T> implements Iterable<T> {
                     continue;
                 }
                 if (coordinatesOnGrid(x + i, y + j)) {
-                   result.add(get(x + i, y + j));
+                    result.add(get(x + i, y + j));
                 }
             }
+        }
+        return result;
+    }
+
+    public List<T> getRow(int y) {
+        return grid.get(y);
+    }
+
+    public List<T> getColumn(int x) {
+        List<T> result = new ArrayList<>();
+        for (int y = 0; y < length(); y++) {
+            result.add(get(x, y));
         }
         return result;
     }
@@ -60,8 +72,18 @@ public class Grid<T> implements Iterable<T> {
         return x > -1 && y > -1 && grid.size() > y && grid.get(y).size() > x;
     }
 
-	@Override
-	public Iterator<T> iterator() {
+    @Override
+    public Iterator<T> iterator() {
         return grid.stream().flatMap(Collection::stream).collect(Collectors.toList()).iterator();
-	}
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (List<T> list : grid) {
+            sb.append(list.toString());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 }
