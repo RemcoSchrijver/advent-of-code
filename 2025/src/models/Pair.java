@@ -2,8 +2,6 @@ package models;
 
 import java.util.Objects;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
 public class Pair<T, S> {
     public T first;
     public S second;
