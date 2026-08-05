@@ -1,27 +1,31 @@
-# Advent of Code repository
+# Advent of Code repository (and Everybody Codes)
 
-My personal git repository tracking my solutions for Advent of Code, each year 
+My personal git repository tracking my solutions for [Advent of Code](https://adventofcode.com) (now also [Everybody Codes](https://everybody.codes)), each year 
 contains its own folder and dependencies are installed using nix.
 The dependencies can be loaded using 
 [nix-direnv](https://github.com/nix-community/nix-direnv) automatically 
 (flake support is required).
 
-## 2025
+## ./2025
 ![2025](https://img.shields.io/badge/stars%20⭐-20-yellow)
 
 Decided to give Java a try this time around.
 
-## 2024
+## ./2024
 ![2024](https://img.shields.io/badge/stars%20⭐-33-yellow)
 
 For this one I chose Python.
 
-## 2023
+## ./2023
 ![2023](https://img.shields.io/badge/stars%20⭐-14-yellow)
 
 I chose Scala for 2023 because I wanted to brush up on my functional programming skills.
 
-## 2022
+## ./2022
 ![2022](https://img.shields.io/badge/stars%20⭐-4-yellow)
 
 This one is done retroactively whenever I feel like it, because this was around 2023 this one is also in Scala.
+
+## ./ec
+
+This is the directory where all different puzzles for Everybody Codes are stored, for more go to the [README](./ec/README.md)
