@@ -1,17 +1,17 @@
 use std::collections::HashMap;
 use std::collections::VecDeque;
 
-use ec_stories_2024::Part;
-use ec_stories_2024::load_input;
-use ec_stories_2024::parse_part;
+use ec_stories_no_1::Part;
+use ec_stories_no_1::{load_input, parse_part, parse_num_from_field_with_equals_split};
+
+const DAY: &str = "day01";
 
 fn main() {
     let part = parse_part().unwrap();
-    let day = "day01";
     match part {
-        Part::Part1 => part1(load_input(day, part)),
-        Part::Part2 => part2(load_input(day, part)),
-        Part::Part3 => part3(load_input(day, part)),
+        Part::Part1 => part1(load_input(DAY, part)),
+        Part::Part2 => part2(load_input(DAY, part)),
+        Part::Part3 => part3(load_input(DAY, part)),
     }
 }
 
@@ -170,20 +170,14 @@ fn parse_line(line: &str) -> Vec<EniFormula> {
     let mut result: Vec<EniFormula> = vec![];
 
     let splits: Vec<&str> = line.split(" ").collect();
-    let modulo = parse_num_from_field(splits.last().copied());
+    let modulo = parse_num_from_field_with_equals_split(splits.last().copied());
     for i in 0..3 {
         result.push(EniFormula {
-            base: parse_num_from_field(splits.get(i).copied()),
-            exponent: parse_num_from_field(splits.get(i + 3).copied()),
+            base: parse_num_from_field_with_equals_split(splits.get(i).copied()),
+            exponent: parse_num_from_field_with_equals_split(splits.get(i + 3).copied()),
             modulo: modulo,
         });
     }
     return result;
 }
 
-fn parse_num_from_field(field: Option<&str>) -> u128 {
-    field
-        .and_then(|actual| actual.split("=").last())
-        .and_then(|value| value.parse::<u128>().ok())
-        .expect("Failed to parse value")
-}

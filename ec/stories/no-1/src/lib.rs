@@ -40,8 +40,9 @@ impl std::fmt::Display for Part {
 pub fn parse_part() -> Result<Part, String> {
     let args: Vec<String> = std::env::args().collect();
 
+    println!("Got args: {:?}", args);
     let part = args
-        .get(2)
+        .get(1)
         .expect("Usage: cargo run <day> <part> [--test]")
         .to_lowercase();
 
@@ -55,4 +56,11 @@ pub fn parse_part() -> Result<Part, String> {
             ));
         }
     }
+}
+
+pub fn parse_num_from_field_with_equals_split(field: Option<&str>) -> u128 {
+    field
+        .and_then(|actual| actual.split("=").last())
+        .and_then(|value| value.parse::<u128>().ok())
+        .expect("Failed to parse value")
 }
