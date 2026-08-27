@@ -32,7 +32,7 @@ fn part1(input: Vec<String>) {
         right.insert_node(right_node.unwrap());
     }
 
-    println!("{}", pretty_string_for_answer(&left, &right));
+    println!("{}", pretty_string_for_answer(&left, &right, false));
 }
 
 fn part2(input: Vec<String>) {
@@ -61,11 +61,36 @@ fn part2(input: Vec<String>) {
         }
     }
 
-    println!("{}", pretty_string_for_answer(&left, &right));
+    println!("{}", pretty_string_for_answer(&left, &right, false));
 }
 
 fn part3(input: Vec<String>) {
-    println!("Not implemented, got input {:?}", input);
+    let rows = input.iter().map(|line| parse_line(line));
+
+    let mut left = TreeNode {
+        root: None,
+        left: None,
+        right: None,
+    };
+    let mut right = TreeNode {
+        root: None,
+        left: None,
+        right: None,
+    };
+
+    for (operation, id, left_node, right_node) in rows {
+        match operation {
+            Operation::Swap => {
+                swap_treenodes_by_id(&mut left, &mut right, id);
+            }
+            Operation::Add => {
+                left.insert_node(left_node.unwrap());
+                right.insert_node(right_node.unwrap());
+            }
+        }
+    }
+
+    println!("{}", pretty_string_for_answer(&left, &right, true));
 }
 
 #[derive(Debug)]
@@ -159,15 +184,27 @@ impl TreeNode {
         return right_result;
     }
 
-    fn return_largest_level_nodes(&self) -> Vec<BaseNode> {
+    fn return_largest_level_nodes(&self, find_lowest_level: bool) -> Vec<BaseNode> {
         let tree_level_map = self.basenodes_and_counts_per_level();
         let mut max = u32::MIN;
+        let mut max_found_at_level = u32::MAX;
         let mut max_nodes = Vec::new();
 
-        for (_, (nodes, count)) in tree_level_map.into_iter() {
+        for (level, (nodes, count)) in tree_level_map.into_iter() {
             if count > max {
+                // 1. New highest count found! It automatically wins.
                 max = count;
+                max_found_at_level = level;
                 max_nodes = nodes;
+            } else if count == max {
+                // 2. WE HAVE A TIE! Use your level rules to break the tie.
+                if find_lowest_level && level < max_found_at_level {
+                    max_found_at_level = level;
+                    max_nodes = nodes;
+                } else if !find_lowest_level && level > max_found_at_level {
+                    max_found_at_level = level;
+                    max_nodes = nodes;
+                }
             }
         }
         return max_nodes;
@@ -194,6 +231,26 @@ impl TreeNode {
 
         return None;
     }
+
+    fn find_all_tree_nodes_by_id(&mut self, id: u128) -> Vec<*mut TreeNode> {
+        let mut result = Vec::new();
+        self.collect_node_pointers_by_id(id, &mut result);
+        result
+    }
+
+    fn collect_node_pointers_by_id(&mut self, id: u128, acc: &mut Vec<*mut TreeNode>) {
+        if self.root.as_ref().is_some_and(|node| node.id == id) {
+            acc.push(self)
+        }
+
+        if let Some(left) = &mut self.left {
+            left.collect_node_pointers_by_id(id, acc);
+        }
+
+        if let Some(right) = &mut self.right {
+            right.collect_node_pointers_by_id(id, acc);
+        }
+    }
 }
 
 fn swap_basenode_between_trees_by_id(left: &mut TreeNode, right: &mut TreeNode, id: u128) {
@@ -205,6 +262,25 @@ fn swap_basenode_between_trees_by_id(left: &mut TreeNode, right: &mut TreeNode, 
         std::mem::swap(&mut l_node.value, &mut r_node.value);
     } else {
         panic!("Couldn't find the id {} in one or both of the trees", id);
+    }
+}
+
+fn swap_treenodes_by_id(left: &mut TreeNode, right: &mut TreeNode, id: u128) {
+    let mut tree_nodes = left.find_all_tree_nodes_by_id(id);
+    tree_nodes.extend(right.find_all_tree_nodes_by_id(id));
+
+    if tree_nodes.len() == 2 {
+        let first_node_pointer = tree_nodes[0];
+        let second_node_pointer = tree_nodes[1];
+
+        unsafe {
+            std::mem::swap(&mut *first_node_pointer, &mut *second_node_pointer);
+        }
+    } else {
+        panic!(
+            "Didn't find exactly 2 tree nodes, found more instead, namely: {}",
+            tree_nodes.len()
+        );
     }
 }
 
@@ -249,9 +325,9 @@ fn parse_operation(operation_string: &str) -> Operation {
     };
 }
 
-fn pretty_string_for_answer(left: &TreeNode, right: &TreeNode) -> String {
-    let left_largest_level = left.return_largest_level_nodes();
-    let right_largest_level = right.return_largest_level_nodes();
+fn pretty_string_for_answer(left: &TreeNode, right: &TreeNode, find_lowest_level: bool) -> String {
+    let left_largest_level = left.return_largest_level_nodes(find_lowest_level);
+    let right_largest_level = right.return_largest_level_nodes(find_lowest_level);
 
     fn stringify_values(nodes: Vec<BaseNode>) -> String {
         let mut nodes_result = String::from("");
