@@ -28,12 +28,20 @@ fn part1(input: Vec<String>) {
     println!("Final score {}", final_score);
 }
 
-fn part2(_input: Vec<String>) {
-    println!("Not implemented yet");
+fn part2(input: Vec<String>) {
+    let snails = parse_snails(input);
+
+    let alignment_day = find_day_snails_align(snails);
+
+    println!("first alignment day: {}", alignment_day);
 }
 
-fn part3(_input: Vec<String>) {
-    println!("Not implemented yet");
+fn part3(input: Vec<String>) {
+    let snails = parse_snails(input);
+
+    let alignment_day = find_day_snails_align(snails);
+
+    println!("first alignment day: {}", alignment_day);
 }
 
 #[derive(Debug)]
@@ -44,7 +52,7 @@ struct Snail {
 
 impl Snail {
     fn position_snail_after_n_days(&self, n: u128) -> Snail {
-        let length_of_path = self.x - 1 + self.y;
+        let length_of_path = self.path_length();
         let moves = n % length_of_path;
 
         let mut new_x = self.x;
@@ -65,6 +73,16 @@ impl Snail {
     fn calculate_formula(&self) -> u128 {
         self.x + self.y * 100
     }
+
+    fn path_length(&self) -> u128 {
+        self.x - 1 + self.y
+    }
+
+    fn days_from_golden_line(&self) -> u128 {
+        let length_of_path = self.path_length();
+
+        length_of_path - self.x
+    }
 }
 
 fn parse_line(line: &str) -> Snail {
@@ -77,4 +95,29 @@ fn parse_line(line: &str) -> Snail {
 
 fn parse_snails(lines: Vec<String>) -> Vec<Snail> {
     lines.iter().map(|line| parse_line(line)).collect()
+}
+
+fn find_day_snails_align(positions: Vec<Snail>) -> u128 {
+    let longest_snail_and_cycle = positions
+        .iter()
+        .map(|snail| (snail, snail.path_length()))
+        .max_by_key(|x| x.1)
+        .unwrap();
+    let initial_days_to_move = longest_snail_and_cycle.0.days_from_golden_line();
+
+    let mut snail_positions: Vec<Snail> = positions
+        .iter()
+        .map(|snail| snail.position_snail_after_n_days(initial_days_to_move)).collect();
+
+    let mut current_day = initial_days_to_move;
+    loop {
+        if snail_positions.iter().all(|snail| snail.y == 1) {
+            break;
+        } else {
+            current_day += longest_snail_and_cycle.1;
+            snail_positions = snail_positions.iter().map(|snail| snail.position_snail_after_n_days(longest_snail_and_cycle.1)).collect();
+        }
+    }
+
+    return current_day;
 }
