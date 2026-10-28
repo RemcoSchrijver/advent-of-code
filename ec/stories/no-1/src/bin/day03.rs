@@ -39,7 +39,7 @@ fn part2(input: Vec<String>) {
 fn part3(input: Vec<String>) {
     let snails = parse_snails(input);
 
-    let alignment_day = find_day_snails_align(snails);
+    let alignment_day = find_day_snails_align_fast(snails);
 
     println!("first alignment day: {}", alignment_day);
 }
@@ -107,7 +107,8 @@ fn find_day_snails_align(positions: Vec<Snail>) -> u128 {
 
     let mut snail_positions: Vec<Snail> = positions
         .iter()
-        .map(|snail| snail.position_snail_after_n_days(initial_days_to_move)).collect();
+        .map(|snail| snail.position_snail_after_n_days(initial_days_to_move))
+        .collect();
 
     let mut current_day = initial_days_to_move;
     loop {
@@ -115,9 +116,53 @@ fn find_day_snails_align(positions: Vec<Snail>) -> u128 {
             break;
         } else {
             current_day += longest_snail_and_cycle.1;
-            snail_positions = snail_positions.iter().map(|snail| snail.position_snail_after_n_days(longest_snail_and_cycle.1)).collect();
+            snail_positions = snail_positions
+                .iter()
+                .map(|snail| snail.position_snail_after_n_days(longest_snail_and_cycle.1))
+                .collect();
         }
     }
 
     return current_day;
+}
+
+fn find_day_snails_align_fast(positions: Vec<Snail>) -> u128 {
+    if positions.is_empty() {
+        return 0;
+    }
+
+    let mut current_day = positions[0].y - 1;
+    let mut increase = positions[0].path_length();
+    
+    for snail in positions.iter().skip(1) {
+        let target_end = snail.y - 1;
+        let modulo_value = snail.path_length();
+
+        while current_day % modulo_value != target_end {
+            current_day += increase;
+        }
+        increase = least_common_multiple(increase, modulo_value)
+    }
+
+    return current_day;
+}
+
+fn greatest_common_divisor(mut a: u128, mut b: u128) -> u128 {
+  assert!(a != 0 && b != 0);
+  while b != 0 {
+    if b < a {
+      std::mem::swap(&mut b, &mut a);
+    }
+    b %= a;
+  }
+  a
+}
+
+
+fn least_common_multiple(a: u128, b: u128) -> u128 {
+    if a == 0 || b == 0 {
+        return 0;
+    } else {
+        return (a * b) / greatest_common_divisor(a, b);
+    }
 }
