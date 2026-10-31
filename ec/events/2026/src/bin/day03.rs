@@ -87,11 +87,13 @@ struct IsoVote {
     vote: Vec<u128>,
 }
 
-const PREFIX: &str = "ISO2-";
+const PREFIX_1: &str = "ISO-";
+const PREFIX_2: &str = "ISO2-";
 impl IsoVote {
     fn parse_from_string(value: &str) -> IsoVote {
         let base_vote_split: Vec<Vec<u128>> = value
-            .strip_prefix(PREFIX)
+            .strip_prefix(PREFIX_1)
+            .or(value.strip_prefix(PREFIX_2))
             .expect("Couldn't strip prefix")
             .split(" ")
             .map(|digits| convert_string_to_digits(digits))
