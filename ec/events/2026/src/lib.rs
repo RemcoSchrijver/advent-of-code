@@ -2,6 +2,7 @@ use core::fmt;
 use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
+use std::thread;
 
 pub fn load_input(day: &str, part: Part) -> Vec<String> {
     let is_test = parse_test_flag();
@@ -63,4 +64,35 @@ pub fn parse_num_from_field_with_equals_split(field: Option<&str>) -> u128 {
         .and_then(|actual| actual.split("=").last())
         .and_then(|value| value.parse::<u128>().ok())
         .expect("Failed to parse value")
+}
+
+pub fn parallel_for_each<T, F>(slice: &mut [T], f: F)
+where
+    T: Send,
+    F: Fn(&mut T) + Sync + Send,
+{
+    let thread_count = thread::available_parallelism()
+        .map(|n| n.get())
+        .unwrap_or(1);
+        
+    if thread_count <= 1 {
+        for item in slice {
+            f(item);
+        }
+        return;
+    }
+
+    let chunk_size = (slice.len() + thread_count - 1) / thread_count;
+
+    let f = &f;
+
+    thread::scope(|scope| {
+        for chunk in slice.chunks_mut(chunk_size) {
+            scope.spawn(move || {
+                for item in chunk {
+                    f(item);
+                }
+            });
+        }
+    });
 }
